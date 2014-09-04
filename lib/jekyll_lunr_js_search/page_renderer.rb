@@ -6,14 +6,20 @@ module Jekyll
       def initialize(site)
         @site = site
       end
-      
-      # render the item, parse the output and get all text inside <p> elements
+
+      # render the item, parse the output and get all text inside of it
       def render(item)
-        item.render({}, @site.site_payload)
+        if item.is_a?(Jekyll::Document)
+          item.output = Jekyll::Renderer.new(@site, item).run
+        else
+          item.render({}, @site.site_payload)
+        end
         doc = Nokogiri::HTML(item.output)
         paragraphs = doc.search('//text()').map {|t| t.content }
         paragraphs = paragraphs.join(" ").gsub("\r", " ").gsub("\n", " ").gsub("\t", " ").gsub(/\s+/, " ")
+        paragraphs.strip
       end
     end
-  end  
+  end
 end
+
