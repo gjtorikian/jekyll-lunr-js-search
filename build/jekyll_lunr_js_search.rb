@@ -44,7 +44,8 @@ module Jekyll
             :url => entry.url,
             :date => entry.date,
             :categories => entry.categories,
-            :body => entry.body
+            :body => entry.body,
+            :excerpt => entry.body[0..140]
           }
           
           puts 'Indexed ' << "#{entry.title} (#{entry.url})"
