@@ -32,7 +32,7 @@ module Jekyll
       # The main content from each page is extracted and saved to disk as json
       def generate(site)
         if @dev_mode
-          if File.exist? File.join(site.dest, @filename)
+          if File.exist? search_json_location
             puts 'Not running indexer in dev mode since search.json exists...'
             return
           end
@@ -65,7 +65,7 @@ module Jekyll
             :collection => entry.collection,
             :class => entry.class,
             :body => entry.body,
-            :excerpt => entry.body[0..140]
+            :excerpt => entry.body[0..140] + "…"
           }
 
           # puts 'Indexed ' << "#{entry.title} (#{entry.collection} - #{entry.url})"
@@ -77,7 +77,7 @@ module Jekyll
         Dir::mkdir(site.dest) unless File.directory?(site.dest)
 
 
-        File.open(File.join(site.dest, @filename), "w") do |file|
+        File.open(search_json_location, "w") do |file|
           file.write(JSON.pretty_generate(json))
         end
 
@@ -86,6 +86,10 @@ module Jekyll
       end
 
     private
+
+      def search_json_location
+        File.join("search", @filename)
+      end
 
       # load the stopwords file
       def stopwords
