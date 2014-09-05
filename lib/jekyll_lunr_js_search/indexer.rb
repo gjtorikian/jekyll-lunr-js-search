@@ -32,7 +32,7 @@ module Jekyll
       # The main content from each page is extracted and saved to disk as json
       def generate(site)
         if @dev_mode
-          if File.join(site.dest, @filename).exist?
+          if File.exist? File.join(site.dest, @filename)
             puts 'Not running indexer in dev mode since search.json exists...'
             return
           end
