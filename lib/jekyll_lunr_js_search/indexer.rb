@@ -21,11 +21,23 @@ module Jekyll
         # stop word exclusion configuration
         @min_length = lunr_config['min_length']
         @stopwords_file = lunr_config['stopwords']
+
+        @dev_mode = lunr_search['dev_mode']
+
+        # File I/O: create search.json file and write out pretty-printed JSON
+        @filename = 'search.json'
       end
 
       # Index all pages except pages matching any value in config['lunr_excludes'] or with date['exclude_from_search']
       # The main content from each page is extracted and saved to disk as json
       def generate(site)
+        if @dev_mode
+          if File.join(site.dest, @filename).exist?
+            puts 'Not running indexer in dev mode since search.json exists...'
+            return
+          end
+        end
+
         puts 'Running the search indexer...'
 
         # gather pages and posts
