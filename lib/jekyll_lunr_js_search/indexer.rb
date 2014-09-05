@@ -22,7 +22,7 @@ module Jekyll
         @min_length = lunr_config['min_length']
         @stopwords_file = lunr_config['stopwords']
 
-        @dev_mode = lunr_search['dev_mode']
+        @dev_mode = lunr_config['dev_mode']
 
         # File I/O: create search.json file and write out pretty-printed JSON
         @filename = 'search.json'
