@@ -64,7 +64,6 @@ module Jekyll
             :categories => entry.categories,
             :collection => entry.collection,
             :class => entry.class,
-            :body => entry.body
             :body => entry.body,
             :excerpt => entry.body[0..140]
           }
