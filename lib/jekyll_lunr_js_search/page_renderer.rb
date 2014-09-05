@@ -15,7 +15,8 @@ module Jekyll
           item.render({}, @site.site_payload)
         end
         doc = Nokogiri::HTML(item.output)
-        paragraphs = doc.search('//text()').map {|t| t.content }
+
+        paragraphs = doc.search('//div[contains(concat(" ", normalize-space(@class), " "), " article-body ")]').map {|t| t.content }
         paragraphs = paragraphs.join(" ").gsub("\r", " ").gsub("\n", " ").gsub("\t", " ").gsub(/\s+/, " ")
         paragraphs.strip
       end
