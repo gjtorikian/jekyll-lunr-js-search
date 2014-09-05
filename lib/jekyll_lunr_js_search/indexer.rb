@@ -65,6 +65,8 @@ module Jekyll
             :collection => entry.collection,
             :class => entry.class,
             :body => entry.body
+            :body => entry.body,
+            :excerpt => entry.body[0..140]
           }
 
           # puts 'Indexed ' << "#{entry.title} (#{entry.collection} - #{entry.url})"
@@ -75,15 +77,13 @@ module Jekyll
         # Create destination directory if it doesn't exist yet. Otherwise, we cannot write our file there.
         Dir::mkdir(site.dest) unless File.directory?(site.dest)
 
-        # File I/O: create search.json file and write out pretty-printed JSON
-        filename = 'search.json'
-        
-        File.open(File.join(site.dest, filename), "w") do |file|
-          file.write(JSON.pretty_generate(json))
+
+        File.open(File.join(site.dest, @filename), "w") do |file|
+          file.write(json)
         end
 
         # Keep the search.json file from being cleaned by Jekyll
-        site.static_files << SearchIndexFile.new(site, site.dest, "/", filename)
+        site.static_files << SearchIndexFile.new(site, site.dest, "/", @filename)
       end
 
     private
