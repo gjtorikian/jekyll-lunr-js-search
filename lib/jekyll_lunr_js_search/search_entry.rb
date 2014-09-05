@@ -13,7 +13,7 @@ module Jekyll
       def self.create_from_document(document, renderer)
         body = renderer.render(document)
         data = document.to_liquid
-        SearchEntry.new(data['title'], data['url'], Time.now, '', body)
+        SearchEntry.new(data['title'], data['url'], Time.now, data['category'], body)
       end
 
       def self.create_from_page(page, renderer)

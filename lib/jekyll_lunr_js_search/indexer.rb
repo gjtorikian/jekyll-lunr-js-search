@@ -78,7 +78,7 @@ module Jekyll
 
 
         File.open(File.join(site.dest, @filename), "w") do |file|
-          file.write(json)
+          file.write(JSON.pretty_generate(json))
         end
 
         # Keep the search.json file from being cleaned by Jekyll
