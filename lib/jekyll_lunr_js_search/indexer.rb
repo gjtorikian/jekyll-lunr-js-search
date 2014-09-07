@@ -1,4 +1,5 @@
 require 'json'
+require 'date'
 
 module Jekyll
   module LunrJsSearch
@@ -26,14 +27,17 @@ module Jekyll
 
         # File I/O: create search.json file and write out pretty-printed JSON
         @filename = 'search.json'
+
+        @generation_strftime = "%m-%d-%y"
       end
 
       # Index all pages except pages matching any value in config['lunr_excludes'] or with date['exclude_from_search']
       # The main content from each page is extracted and saved to disk as json
       def generate(site)
-        if @dev_mode
-          if File.exist? search_json_location
-            puts 'Not running indexer in dev mode since search.json exists...'
+        if @dev_mode && File.exist?(search_json_location)
+          search_json = JSON.parse(File.open(search_json_location).read)
+          if search_json["generation_time"] && Date.strptime(search_json["generation_time"], @generation_strftime).day == Time.now.day
+            puts 'Not running indexer in dev mode since search.json exists within the last day...'
             return
           end
         end
@@ -42,14 +46,13 @@ module Jekyll
 
         # gather pages and posts
         items = pages_to_index(site)
-        content_renderer = PageRenderer.new(site)
-        index = []
 
         site.collections.each do |name, collection|
-          collection.docs.each do |document|
-            items << document
-          end
+          collection.docs.each{ |document| items << document }
         end
+
+        content_renderer = PageRenderer.new(site)
+        index = []
 
         items.each do |item|
           entry = SearchEntry.create(item, content_renderer)
@@ -71,7 +74,7 @@ module Jekyll
           # puts 'Indexed ' << "#{entry.title} (#{entry.collection} - #{entry.url})"
         end
 
-        json = {:generation_time => Time.now.strftime("%m-%d-%y"), :entries => index}
+        json = {:generation_time => Time.now.strftime(@generation_strftime), :entries => index}
 
         # Create destination directory if it doesn't exist yet. Otherwise, we cannot write our file there.
         Dir::mkdir(site.dest) unless File.directory?(site.dest)
