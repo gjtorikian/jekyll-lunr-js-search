@@ -71,11 +71,10 @@ module Jekyll
           # puts 'Indexed ' << "#{entry.title} (#{entry.collection} - #{entry.url})"
         end
 
-        json = {:entries => index}
+        json = {:generation_time => Time.now.strftime("%m-%d-%y"), :entries => index}
 
         # Create destination directory if it doesn't exist yet. Otherwise, we cannot write our file there.
         Dir::mkdir(site.dest) unless File.directory?(site.dest)
-
 
         File.open(search_json_location, "w") do |file|
           file.write(JSON.pretty_generate(json))
