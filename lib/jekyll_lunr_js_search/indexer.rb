@@ -37,12 +37,12 @@ module Jekyll
         if @dev_mode && File.exist?(search_json_location)
           search_json = JSON.parse(File.open(search_json_location).read)
           if search_json["generation_time"] && Date.strptime(search_json["generation_time"], @generation_strftime).day == Time.now.day
-            puts 'Not running indexer in dev mode since search.json exists within the last day...'
+            puts '\nNot running indexer in dev mode since search.json exists within the last day...\n'
             return
           end
         end
 
-        puts 'Running the search indexer...'
+        puts '\nRunning the search indexer...\n'
 
         # gather pages and posts
         items = pages_to_index(site)
