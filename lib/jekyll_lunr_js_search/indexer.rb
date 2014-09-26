@@ -60,6 +60,8 @@ module Jekyll
         items.each do |item|
           entry = SearchEntry.create(item, content_renderer)
 
+          next if entry.nil?
+
           entry.strip_index_suffix_from_url! if @strip_index_html
           entry.strip_stopwords!(stopwords, @min_length) if File.exists?(@stopwords_file)
 

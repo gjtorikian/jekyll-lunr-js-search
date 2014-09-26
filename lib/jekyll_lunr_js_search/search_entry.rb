@@ -11,6 +11,7 @@ module Jekyll
       end
 
       def self.create_from_document(document, renderer)
+        return if document.data["exclude_from_search"] || document.data["redirect_to"]
         body = renderer.render(document)
         data = document.to_liquid
         SearchEntry.new(data['title'], data['url'], Time.now, data['category'], body)
