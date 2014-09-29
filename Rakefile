@@ -1,3 +1,6 @@
+#!/usr/bin/env rake
+require "bundler/gem_tasks"
+
 require 'rake'
 require 'uglifier'
 
@@ -28,7 +31,7 @@ task :concat_js do
     files.each do |file|
     	out += File.read(file)
     end
- 
+
     File.open('build/search.min.js', 'w') do |file|
 		file.write(out)
     end
