@@ -90,6 +90,7 @@ module Jekyll
         File.open(search_json_location_dest, "w") do |file|
           file.write(JSON.pretty_generate(json))
         end
+        site.keep_files << "search.json"
 
         if @dev_mode
           File.open(search_json_location_source, "w") do |file|
