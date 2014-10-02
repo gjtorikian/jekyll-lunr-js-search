@@ -37,7 +37,7 @@ module Jekyll
       # Index all pages except pages matching any value in config['lunr_excludes'] or with date['exclude_from_search']
       # The main content from each page is extracted and saved to disk as json
       def generate(site)
-        search_json_location = File.join(File.expand_path("search", site.dest), @filename)
+        search_json_location = File.expand_path("search/search.json", site.source)
 
         if @dev_mode && File.exist?(search_json_location)
           search_json = JSON.parse(File.open(search_json_location).read)
