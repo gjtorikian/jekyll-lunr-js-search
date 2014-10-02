@@ -40,8 +40,8 @@ module Jekyll
         search_json_location_source = File.expand_path("search/search.json", site.source)
         search_json_location_dest = File.expand_path("search.json", site.dest)
 
-        if @dev_mode && File.exist?(search_json_location)
-          search_json = JSON.parse(File.open(search_json_location).read)
+        if @dev_mode && File.exist?(search_json_location_source)
+          search_json = JSON.parse(File.open(search_json_location_source).read)
           if search_json["generation_time"] && Date.strptime(search_json["generation_time"], @generation_strftime).day == Time.now.day
             puts "\nNot running indexer in dev mode since search.json exists within the last day...\n"
             return
