@@ -84,7 +84,9 @@ module Jekyll
         # Create destination directory if it doesn't exist yet. Otherwise, we cannot write our file there.
         Dir::mkdir(site.dest) unless File.directory?(site.dest)
 
-        File.open(search_json_location, "w") do |file|
+        dest_path = File.join(File.expand_path("search", site.dest), @filename)
+
+        File.open(dest_path, "w") do |file|
           file.write(JSON.pretty_generate(json))
         end
 
@@ -93,10 +95,6 @@ module Jekyll
       end
 
     private
-
-      def search_json_location
-        File.join("search", @filename)
-      end
 
       # load the stopwords file
       def stopwords
