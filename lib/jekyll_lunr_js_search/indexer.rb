@@ -37,7 +37,8 @@ module Jekyll
       # Index all pages except pages matching any value in config['lunr_excludes'] or with date['exclude_from_search']
       # The main content from each page is extracted and saved to disk as json
       def generate(site)
-        search_json_location = File.expand_path("search/search.json", site.source)
+        search_json_location_source = File.expand_path("search/search.json", site.source)
+        search_json_location_dest = File.expand_path("search.json", site.dest)
 
         if @dev_mode && File.exist?(search_json_location)
           search_json = JSON.parse(File.open(search_json_location).read)
@@ -86,12 +87,15 @@ module Jekyll
         # Create destination directory if it doesn't exist yet. Otherwise, we cannot write our file there.
         Dir::mkdir(site.dest) unless File.directory?(site.dest)
 
-        File.open(search_json_location, "w") do |file|
+        File.open(search_json_location_dest, "w") do |file|
           file.write(JSON.pretty_generate(json))
         end
 
-        # Keep the search.json file from being cleaned by Jekyll
-        site.static_files << SearchIndexFile.new(site, site.dest, "/", @filename)
+        if @dev_mode
+          File.open(search_json_location_source, "w") do |file|
+            file.write(JSON.pretty_generate(json))
+          end
+        end
       end
 
     private
